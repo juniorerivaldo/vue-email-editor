@@ -33,16 +33,68 @@ export default {
       console.log('editorReady');
     },
     saveDesign() {
-      this.$refs.emailEditor.editor.saveDesign(
-        (design) => {
-          console.log('saveDesign', design);
-        }
-      )
-    },
+  this.$refs.emailEditor.editor.saveDesign((design) => {
+    try {
+      // Parse o conteúdo do design para garantir que seja um objeto JSON válido
+      const newDesign = design
+
+      // Cria um blob com o conteúdo JSON
+      const blob = new Blob([JSON.stringify(newDesign, null, 2)], { type: 'application/json' });
+
+      // Cria um objeto URL a partir do blob
+      const url = window.URL.createObjectURL(blob);
+
+      // Cria um link temporário e configura o URL
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'novo-design.json'; // Nome do arquivo para download
+
+      // Adiciona o link ao documento
+      document.body.appendChild(link);
+
+      // Simula um clique no link para iniciar o download
+      link.click();
+
+      // Remove o link do documento
+      document.body.removeChild(link);
+
+      // Revoga o URL para liberar os recursos
+      window.URL.revokeObjectURL(url);
+
+      console.log('Download do novo arquivo JSON concluído com sucesso.');
+    } catch (error) {
+      console.error('Erro ao criar e baixar o novo arquivo JSON:', error);
+    }
+  });
+}
+,
     exportHtml() {
       this.$refs.emailEditor.editor.exportHtml(
         (data) => {
-          console.log('exportHtml', data);
+          const content = data.html;
+
+      // Cria um blob com o conteúdo HTML.
+      const blob = new Blob([content], { type: 'text/html' });
+
+      // Cria um objeto URL a partir do blob.
+      const url = window.URL.createObjectURL(blob);
+
+      // Cria um link temporário e configura o URL.
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'export.handlebars';
+
+      // Adiciona o link ao documento.
+      document.body.appendChild(link);
+
+      // Simula um clique no link para iniciar o download.
+      link.click();
+
+      // Remove o link do documento.
+      document.body.removeChild(link);
+
+      // Revoga o URL para liberar os recursos.
+      window.URL.revokeObjectURL(url);
         }
       )
     }

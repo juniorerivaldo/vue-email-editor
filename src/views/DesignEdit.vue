@@ -41,7 +41,7 @@ export default {
     exportHtml() {
       this.$refs.emailEditor.editor.exportHtml(
         (data) => {
-          console.log('exportHtml', data);
+          console.log('festa', data);
         }
       )
     }
